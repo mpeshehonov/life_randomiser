@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Prata', serif;
+  }
+}
+
+@layer utilities {
+  .font-script {
+    font-family: 'Marck Script', cursive;
+  }
+}
