@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './App.css';
 
@@ -6,6 +6,11 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [currentIdea, setCurrentIdea] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+
+  const cloudStyle = {
+    ['--cloud' as any]: '#FFF7EE',
+    ['--cloud-hover' as any]: '#FFF1E3',
+  } as CSSProperties;
 
   const menuContainerVariants = {
     hidden: { opacity: 0 },
@@ -154,10 +159,7 @@ function App() {
               transition={{ type: 'spring', stiffness: 260, damping: 26 }}
               className="text-center"
             >
-              <h1 className="text-5xl font-black tracking-tight mb-3">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-700 to-rose-700">Randomiser</span>
-              </h1>
-              <p className="font-script text-4xl font-semibold text-[#5B3A29]">Что будем делать сегодня?</p>
+              <p className="font-script text-9xl font-semibold text-[#5B3A29]">Что будем делать сегодня?</p>
             </motion.div>
           ) : (
             <motion.div
@@ -168,10 +170,6 @@ function App() {
               transition={{ type: 'spring', stiffness: 260, damping: 26 }}
               className="text-center w-full max-w-md"
             >
-              <h1 className="text-4xl font-black tracking-tight mb-4">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-700 to-rose-700">Randomiser</span>
-              </h1>
-              
               {isGenerating ? (
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -193,7 +191,7 @@ function App() {
                       />
                     ))}
                   </div>
-                  <p className="text-stone-700/90 text-2xl font-semibold">Подбираю идею…</p>
+                  <p className="text-stone-700/90 text-8xl font-semibold">Подбираю идею…</p>
                 </motion.div>
               ) : currentIdea ? (
                 <motion.div
@@ -202,20 +200,26 @@ function App() {
                   transition={{ delay: 0.2 }}
                   className="mt-8"
                 >
-                  <div className="bg-white/60 backdrop-blur-md rounded-2xl p-8 border border-white/70 shadow-xl mb-6">
-                    <p className="text-2xl text-stone-800 font-semibold leading-relaxed">
+                  <motion.div
+                    initial={{ y: 10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ type: 'spring', stiffness: 220, damping: 22 }}
+                    className="bg-[#FFF7EE] rounded-3xl p-10 shadow-xl mb-8"
+                  >
+                    <p className="text-8xl text-[#5B3A29] font-semibold leading-relaxed">
                       {currentIdea}
                     </p>
-                  </div>
+                  </motion.div>
                   
-                  <div className="flex flex-col gap-[2mm] items-center">
+                  <div className="flex flex-col gap-[8mm] items-center">
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handleTryAgain}
-                      className="inline-flex items-center gap-3 px-10 py-6 rounded-full bg-[#EAD7C1] hover:bg-[#E4CFB6] text-[#5B3A29] font-semibold text-2xl transition-all duration-300 shadow-md hover:shadow-lg focus:outline-none focus-visible:outline-none focus-visible:ring-0"
+                      style={cloudStyle}
+                      className="cloud-btn cloud-btn--thought inline-flex items-center gap-3 px-14 py-8 text-[#5B3A29] font-semibold text-8xl focus:outline-none focus-visible:outline-none focus-visible:ring-0"
                     >
-                      <span className="text-2xl">🔄</span>
+                      <span className="text-7xl">🔄</span>
                       <span>Попробовать ещё</span>
                     </motion.button>
                     
@@ -223,9 +227,10 @@ function App() {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handleBack}
-                      className="inline-flex items-center gap-3 px-8 py-5 rounded-full bg-white/50 hover:bg-white/70 text-[#5B3A29] font-medium text-xl transition-all duration-300 shadow-sm hover:shadow-md focus:outline-none focus-visible:outline-none focus-visible:ring-0"
+                      style={cloudStyle}
+                      className="cloud-btn cloud-btn--thought inline-flex items-center gap-3 px-12 py-7 text-[#5B3A29] font-medium text-7xl focus:outline-none focus-visible:outline-none focus-visible:ring-0"
                     >
-                      <span className="text-2xl">←</span>
+                      <span className="text-6xl">←</span>
                       <span>Назад</span>
                     </motion.button>
                   </div>
@@ -237,7 +242,7 @@ function App() {
 
         {!selectedCategory && (
           <motion.div
-            className="flex flex-col items-center gap-[2mm]"
+            className="flex flex-col items-center gap-[10mm]"
             variants={menuContainerVariants}
             initial="hidden"
             animate="show"
@@ -248,10 +253,11 @@ function App() {
                 variants={menuItemVariants}
                 whileHover={{ scale: 1.03, translateY: -1 }}
                 whileTap={{ scale: 0.97 }}
-                className="inline-flex items-center gap-4 px-10 py-6 rounded-full bg-[#EAD7C1] hover:bg-[#E4CFB6] text-[#5B3A29] font-semibold text-2xl transition-all duration-300 shadow-md hover:shadow-lg focus:outline-none focus-visible:outline-none focus-visible:ring-0"
+                style={cloudStyle}
+                className="cloud-btn cloud-btn--thought inline-flex items-center gap-3 px-14 py-8 text-[#5B3A29] font-semibold text-8xl focus:outline-none focus-visible:outline-none focus-visible:ring-0"
                 onClick={() => handleCategoryClick(category.id)}
               >
-                <span className="text-3xl">{category.emoji}</span>
+                <span className="text-9xl">{category.emoji}</span>
                 <span>{category.label}</span>
               </motion.button>
             ))}
@@ -264,7 +270,7 @@ function App() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
-          className="mt-12 font-script text-3xl font-semibold text-center text-[#5B3A29]"
+          className="relative z-30 mt-14 font-script text-9xl font-semibold text-center text-[#5B3A29]"
         >
           Создано для ярких впечатлений ✨
         </motion.p>

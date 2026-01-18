@@ -1,1 +1,89 @@
-/* Empty to allow Tailwind to handle styles */
+/* More realistic "cloud" button:
+   - Base pill + top puffs via radial-gradients
+   - Uses CSS vars help with theming:
+     --cloud: base color, --cloud-hover: hover color
+*/
+.cloud-btn {
+  position: relative;
+  isolation: isolate;
+  border: 0;
+  border-radius: 9999px;
+  cursor: pointer;
+  user-select: none;
+
+  --cloud-current: var(--cloud, #ead7c1);
+
+  /* Depth */
+  box-shadow:
+    0 18px 28px rgba(91, 58, 41, 0.12),
+    0 6px 10px rgba(91, 58, 41, 0.08);
+  transition: transform 220ms ease, box-shadow 220ms ease, filter 220ms ease;
+
+  /* Soft highlight + base */
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.18) 45%, rgba(255, 255, 255, 0) 100%),
+    radial-gradient(120% 90% at 30% 18%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 55%),
+    var(--cloud-current);
+}
+
+.cloud-btn > * {
+  position: relative;
+  z-index: 1;
+}
+
+.cloud-btn:hover {
+  --cloud-current: var(--cloud-hover, var(--cloud, #ead7c1));
+  box-shadow:
+    0 22px 34px rgba(91, 58, 41, 0.14),
+    0 8px 12px rgba(91, 58, 41, 0.10);
+}
+
+.cloud-btn::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+
+  /* Puff band above the button */
+  --puff-h: clamp(24px, 1.3em, 58px);
+  inset: calc(var(--puff-h) * -0.72) -18px auto -18px;
+  height: var(--puff-h);
+
+  background:
+    radial-gradient(circle at 12% 82%, var(--cloud-current) 0 58%, transparent 60%),
+    radial-gradient(circle at 30% 35%, var(--cloud-current) 0 72%, transparent 74%),
+    radial-gradient(circle at 52% 22%, var(--cloud-current) 0 78%, transparent 80%),
+    radial-gradient(circle at 72% 38%, var(--cloud-current) 0 70%, transparent 72%),
+    radial-gradient(circle at 90% 84%, var(--cloud-current) 0 56%, transparent 58%);
+  filter: drop-shadow(0 10px 14px rgba(91, 58, 41, 0.10));
+}
+
+.cloud-btn::after {
+  content: none;
+}
+
+/* Thought bubble variant:
+   - remove top "puffs"
+   - add 2-circle tail down-left on one guide line (far circle is smaller)
+*/
+.cloud-btn--thought::before {
+  content: none;
+}
+
+.cloud-btn--thought::after {
+  content: '';
+  position: absolute;
+  z-index: -2;
+  pointer-events: none;
+
+  width: 56px;
+  height: 56px;
+  left: 2%;
+  bottom: -40px;
+
+  background:
+    /* near circle (bigger) */
+    radial-gradient(circle at 48% 54%, var(--cloud-current) 0 14%, transparent 16%),
+    /* far circle (smaller), down-left */
+    radial-gradient(circle at 30% 72%, var(--cloud-current) 0 9%, transparent 11%);
+  filter: drop-shadow(0 10px 14px rgba(91, 58, 41, 0.10));
+}
